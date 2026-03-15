@@ -1,0 +1,70 @@
+<div class="container">
+  <h1>Procesador IA – Imix</h1>
+  <p class="subtitle">Ingresa un texto para ser analizado por inteligencia artificial.</p>
+  <p class="auth-status" [class.ready]="authReady">
+    {{ authReady ? 'Sesion segura activa' : 'Sesion segura pendiente' }}
+  </p>
+
+  <!-- Formulario de envío -->
+  <div class="form-group">
+    <textarea
+      [(ngModel)]="text"
+      placeholder="Ingrese el texto a procesar..."
+      rows="4"
+      [disabled]="loading"
+    ></textarea>
+
+    <div class="actions">
+      <button (click)="send()" [disabled]="loading || !text.trim()" class="btn-primary">
+        <span *ngIf="!loading">Enviar</span>
+        <span *ngIf="loading">Enviando...</span>
+      </button>
+      <button (click)="reset()" [disabled]="loading" class="btn-secondary">
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de procesamiento -->
+  <div *ngIf="loading" class="status processing">
+    <div class="spinner"></div>
+    <span>Procesando solicitud con IA...</span>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="status error">
+    <strong>Error:</strong> {{ errorMessage }}
+  </div>
+
+  <!-- Resultado -->
+  <div *ngIf="result" class="result-card">
+    <h3>Resultado</h3>
+
+    <div class="result-row">
+      <span class="label">Estado:</span>
+      <span class="badge" [class.completed]="result.status === 'completed'">
+        {{ result.status }}
+      </span>
+    </div>
+
+    <div class="result-row">
+      <span class="label">Texto enviado:</span>
+      <p class="value">{{ result.text }}</p>
+    </div>
+
+    <div class="result-row">
+      <span class="label">Respuesta IA:</span>
+      <p class="value highlight">{{ result.result }}</p>
+    </div>
+
+    <div class="result-row">
+      <span class="label">ID de solicitud:</span>
+      <code>{{ result.id }}</code>
+    </div>
+
+    <div class="result-row">
+      <span class="label">Fecha:</span>
+      <span>{{ result.createdAt | date: 'medium' }}</span>
+    </div>
+  </div>
+</div>
